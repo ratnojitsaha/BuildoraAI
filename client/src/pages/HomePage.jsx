@@ -22,7 +22,7 @@ const HomePage = () => {
         <nav className="sticky top-0 z-10 flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-2">
               <img src="/logo.svg" alt="logo" className='size-6'/>
-              <span className='text-xl font-semibold tracking-tight'>BuilderAI</span>
+              <span className='text-xl font-semibold tracking-tight'>Buildora AI</span>
           </div>
           <div className='flex items-center gap-4 text-sm font-medium text-zinc-300'>
             <span>{user?.name}</span>

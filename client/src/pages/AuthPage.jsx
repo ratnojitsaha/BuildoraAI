@@ -49,7 +49,7 @@ const AuthPage = ({mode}) => {
           <div className="mb-10">
             <h1 className="text-3xl font-medium tracking-tight text-zinc-900 mb-1.5 font-sans">{isLogin ? "Sign in" : "Create an account"}</h1>
             <p className='text-sm text-zinc-400'>
-              {isLogin ? "Enter your credentials to access your website builder." : "Get started by entering your registration details."}
+              {isLogin ? "Enter your credentials to access your Buildora account." : "Get started by entering your registration details."}
             </p>
           </div>
 
@@ -96,7 +96,7 @@ const AuthPage = ({mode}) => {
       <p className='text-sm text-zinc-400 mt-8 pt-6 border-t border-zinc-100 font-sans'>
         {isLogin ? (
           <>
-            New to BuilderAI?{" "}
+            New to Buildora AI?{" "}
             <Link to="/register" className="text-zinc-900 font-medium hover:underline" >
               Create an account
             </Link>
