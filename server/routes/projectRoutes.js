@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { createProject, deleteProject, getProject, getPublicProject, listProjects, publishProject, updateProjectFiles } from "../controllers/projectController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
+import { aiRateLimiter } from "../middleware/rateLimitMiddleware.js";
 import { chat } from "../controllers/chatController.js";
 
 const projectRouter = Router();
@@ -19,6 +20,6 @@ projectRouter.put("/:id/files", updateProjectFiles)
 projectRouter.post("/:id/publish", publishProject)
 
 // Chat
-projectRouter.post("/:id/chat", chat)
+projectRouter.post("/:id/chat",aiRateLimiter,  chat)
 
 export default projectRouter;

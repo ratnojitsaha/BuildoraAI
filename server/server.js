@@ -2,6 +2,8 @@ import express from "express";
 import "dotenv/config";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import rateLimit from "express-rate-limit";
+
 import { connectToDatabase } from "./config/db.js";
 import authRouter from "./routes/authRoutes.js";
 import projectRouter from "./routes/projectRoutes.js";
@@ -13,6 +15,16 @@ await connectToDatabase()
 app.use(cors({origin: process.env.ORIGINS.split(","), credentials: true}))
 app.use(cookieParser())
 app.use(express.json())
+
+const aiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 20,
+    standardHeaders: "draft-8",
+    legacyHeaders: false,
+    message: {
+        error: "Too many requests. Please try again later."
+    }
+});
 
 app.get("/", (req, res)=> res.send("Server is Live!"))
 app.use('/api/auth', authRouter)
