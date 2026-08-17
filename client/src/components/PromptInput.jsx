@@ -1,16 +1,28 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {ArrowRightIcon, CloudUploadIcon, Loader2Icon, MicIcon} from 'lucide-react'
+import toast from 'react-hot-toast'
 
 const PromptInput = ({onSubmit, loading = false, placeholder = "Describe the website you want to build...", large = false, autoFocus = false, variant = "default"}) => {
 
     const [value, setValue] = useState("");
+    const [isListening, setIsListening] = useState(false);
     const textareaRef = useRef(null)
+    const recognitionRef = useRef(null)
+    const speechBaseRef = useRef("")
 
     useEffect(()=>{
         if(autoFocus && textareaRef.current){
             textareaRef.current.focus();
         }
     },[autoFocus])
+
+    useEffect(()=>{
+        return () => {
+            if(recognitionRef.current){
+                recognitionRef.current.abort();
+            }
+        }
+    },[])
 
     const handleSubmit = (e)=>{
         if(e) e.preventDefault()
@@ -27,6 +39,67 @@ const PromptInput = ({onSubmit, loading = false, placeholder = "Describe the web
         }
     }
 
+    const handleToggleSpeech = ()=>{
+        if(loading) return;
+
+        if(isListening && recognitionRef.current){
+            recognitionRef.current.stop();
+            return;
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if(!SpeechRecognition){
+            toast.error("Speech recognition is not supported in this browser");
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognitionRef.current = recognition;
+        speechBaseRef.current = value.trim();
+
+        recognition.lang = navigator.language || "en-US";
+        recognition.continuous = true;
+        recognition.interimResults = true;
+
+        recognition.onstart = () => {
+            setIsListening(true);
+            textareaRef.current?.focus();
+        };
+
+        recognition.onresult = (event) => {
+            let transcript = "";
+
+            for(let i = 0; i < event.results.length; i += 1){
+                transcript += event.results[i][0].transcript;
+            }
+
+            const nextValue = [speechBaseRef.current, transcript.trim()]
+                .filter(Boolean)
+                .join(" ");
+
+            setValue(nextValue);
+        };
+
+        recognition.onerror = (event) => {
+            if(event.error !== "aborted" && event.error !== "no-speech"){
+                toast.error("Could not capture speech. Please try again.");
+            }
+            setIsListening(false);
+        };
+
+        recognition.onend = () => {
+            setIsListening(false);
+            recognitionRef.current = null;
+        };
+
+        try {
+            recognition.start();
+        } catch {
+            toast.error("Speech recognition is already running");
+        }
+    }
+
 if(variant === "glass"){
     return (
         <form onSubmit={handleSubmit} className='max-w-2xl w-full bg-white/10 backdrop-blur-xl rounded-xl ring-1 ring-white/25 focus-within:ring-2 focus-within:ring-white/30 overflow-hidden mt-6 transition'>
@@ -40,7 +113,14 @@ if(variant === "glass"){
                     <CloudUploadIcon size={18}/>
                 </label>
                 <div className='flex items-center justify-end gap-2'>
-                    <button type='button' className="flex items-center justify-center p-1 text-white/70 hover:text-white cursor-pointer">
+                    <button 
+                    type='button' 
+                    onClick={handleToggleSpeech}
+                    disabled={loading}
+                    aria-label={isListening ? "Stop speech recognition" : "Start speech recognition"}
+                    aria-pressed={isListening}
+                    title={isListening ? "Stop listening" : "Start voice input"}
+                    className={`flex items-center justify-center p-1 rounded-full cursor-pointer transition ${isListening ? "text-white bg-red-500/40 ring-1 ring-white/40" : "text-white/70 hover:text-white"} disabled:opacity-40`}>
                         <MicIcon size={18}/>
                     </button>
 

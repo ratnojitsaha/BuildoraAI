@@ -38,7 +38,7 @@ const HomePage = () => {
               {/* Promo Badge */}
               <div className='flex items-center gap-2 p-1.5 pr-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-[13px] text-white/90'>
                 <span className='px-3 py-1 text-[11px] bg-red-700 rounded-full font-medium tracking-wider'>PROMO</span>
-                <span>Create your first project for free.</span>
+                <span>Create your project for free.</span>
               </div>
 
               {/* Title */}
