@@ -423,6 +423,14 @@ Potential improvements include:
 * **LinkedIn:** https://www.linkedin.com/in/saharatnojit/
 
 ---
+Screenshots : 
+In App:
+<img width="2876" height="1636" alt="image" src="https://github.com/user-attachments/assets/7dd4a13e-bd59-4897-a206-101dcb6c5c7e" />
+
+In Preview: 
+<img width="2880" height="1648" alt="image" src="https://github.com/user-attachments/assets/0088050a-94c9-4ea4-836d-161492a097d5" />
+
+---
 
 ## License
 
