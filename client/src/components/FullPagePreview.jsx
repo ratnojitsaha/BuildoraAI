@@ -25,17 +25,16 @@ const FullPagePreview = ({files}) => {
 
   return (
     <div className="h-screen w-screen bg-white overflow-hidden">
-        <SandpackProvider template='react' 
-        files={sandpackFiles} 
-        customSetup={{dependencies}} 
-        options={{
-            externalResources: [
-                "https://cdn.tailwindcss.com",
-                "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css",
-            ],
-            logLevel: 0,
-        }} 
-        className="h-full w-full">
+
+           {/* debugging the sandpack error that is stopping to generate preview in deployment */}
+            <SandpackProvider
+                template="react"
+                files={sandpackFiles}
+                options={{
+                    logLevel: 0,
+                }}
+                className="h-full w-full"
+            >
 
             
             <SandpackErrorMonitor onErrorChange={setShowErrorOverlay}/>
